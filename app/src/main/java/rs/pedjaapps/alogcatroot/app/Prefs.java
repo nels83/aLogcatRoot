@@ -1,12 +1,12 @@
 package rs.pedjaapps.alogcatroot.app;
 
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class Prefs
 {
@@ -18,7 +18,6 @@ public class Prefs
     public static final String FILTER_PATTERN_KEY = "filterPattern";
     public static final String SHARE_HTML_KEY = "shareHtml";
     public static final String KEEP_SCREEN_ON_KEY = "keepScreenOn";
-    public static final String HAS_ROOT_ACCESS_KEY = "hasRootAccess";
 
     private static SharedPreferences sharedPrefs = null;
 
@@ -180,15 +179,5 @@ public class Prefs
     public static void setFilterPattern(boolean filterPattern)
     {
         setBoolean(FILTER_PATTERN_KEY, filterPattern);
-    }
-
-    public static boolean hasRootAccess()
-    {
-        return getBoolean(HAS_ROOT_ACCESS_KEY, false);
-    }
-
-    public static void setHasRootAccess(boolean hasRootAccess)
-    {
-        setBoolean(HAS_ROOT_ACCESS_KEY, hasRootAccess);
     }
 }

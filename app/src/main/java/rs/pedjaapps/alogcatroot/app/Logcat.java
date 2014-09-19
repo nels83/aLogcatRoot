@@ -1,6 +1,5 @@
 package rs.pedjaapps.alogcatroot.app;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -84,7 +83,7 @@ public class Logcat
 
             List<String> progs = new ArrayList<String>();
 
-            if (Prefs.hasRootAccess())
+            //if (Prefs.hasRootAccess())
             {
                 progs.add("su");
                 progs.add("-c");

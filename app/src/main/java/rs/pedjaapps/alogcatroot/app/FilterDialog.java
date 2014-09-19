@@ -93,7 +93,7 @@ public class FilterDialog extends AlertDialog
 
                         mLogActivity.setFilterMenu();
                         dismiss();
-                        mLogActivity.reset();
+                        mLogActivity.reset(false);
                     }
                 });
         setButton(BUTTON_NEUTRAL, mLogActivity.getResources().getString(R.string.clear),
@@ -113,7 +113,7 @@ public class FilterDialog extends AlertDialog
 
                         mLogActivity.setFilterMenu();
                         dismiss();
-                        mLogActivity.reset();
+                        mLogActivity.reset(false);
                     }
                 });
         setButton(BUTTON_NEGATIVE, mLogActivity.getResources().getString(R.string.cancel),

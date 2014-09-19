@@ -8,7 +8,6 @@ public class ALogcatApplication extends Application
 {
     private static final boolean DEBUG = false;
     private static Context context;
-    private static boolean rotoCheckedThisSession = false;
 
     @Override
     public void onCreate()
@@ -27,15 +26,5 @@ public class ALogcatApplication extends Application
     public static Context getContext()
     {
         return context;
-    }
-
-    public static boolean isRotoCheckedThisSession()
-    {
-        return rotoCheckedThisSession;
-    }
-
-    public static void setRotoCheckedThisSession(boolean rotoCheckedThisSession)
-    {
-        ALogcatApplication.rotoCheckedThisSession = rotoCheckedThisSession;
     }
 }

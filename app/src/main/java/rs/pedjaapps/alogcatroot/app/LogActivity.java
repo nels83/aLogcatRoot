@@ -1,18 +1,5 @@
 package rs.pedjaapps.alogcatroot.app;
 
-import com.crashlytics.android.Crashlytics;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -33,8 +20,22 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class LogActivity extends ListActivity
 {
+    static final SimpleDateFormat LOG_FILE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ssZ");
     static final SimpleDateFormat LOG_DATE_FORMAT = new SimpleDateFormat("MMM d, yyyy HH:mm:ss ZZZZ");
     private static final Executor EX = Executors.newCachedThreadPool();
 
@@ -60,7 +61,7 @@ public class LogActivity extends ListActivity
     private MenuItem mFilterItem;
 
     private Level mLastLevel = Level.V;
-    private Logcat mLogcat;
+    private LogCat mLogCat;
     private boolean mPlay = true;
 
     private Handler mHandler = new Handler()
@@ -106,7 +107,7 @@ public class LogActivity extends ListActivity
             mLogEntryAdapter.remove(0);
         }
 
-        Format format = mLogcat.mFormat;
+        Format format = mLogCat.mFormat;
         Level level = format.getLevel(s);
         if (level == null)
         {
@@ -165,8 +166,7 @@ public class LogActivity extends ListActivity
             {
             }
         });
-
-        // Log.v("alogcat", "created");
+        mLogCat = new LogCat(mHandler);
     }
 
 
@@ -175,7 +175,6 @@ public class LogActivity extends ListActivity
     public void onStart()
     {
         super.onStart();
-        // Log.v("alogcat", "started");
     }
 
     private void init()
@@ -187,35 +186,30 @@ public class LogActivity extends ListActivity
 
         mLogEntryAdapter = new LogEntryAdapter(this, R.layout.entry, new ArrayList<LogEntry>(WINDOW_SIZE));
         setListAdapter(mLogEntryAdapter);
-        reset();
+        reset(false);
         setKeepScreenOn();
     }
 
     @Override
     public void onResume()
     {
-        //Debug.startMethodTracing("alogcat");
         super.onResume();
         init();
-        // Log.v("alogcat", "resumed");
     }
 
     @Override
     public void onPause()
     {
         super.onPause();
-        // Log.v("alogcat", "paused");
-
-        //Debug.stopMethodTracing();
     }
 
     @Override
     public void onStop()
     {
         super.onStop();
-        if (mLogcat != null)
+        if (mLogCat != null)
         {
-            mLogcat.stop();
+            mLogCat.stop();
         }
     }
 
@@ -223,7 +217,6 @@ public class LogActivity extends ListActivity
     public void onDestroy()
     {
         super.onDestroy();
-        // Log.v("alogcat", "destroyed");
     }
 
     @Override
@@ -238,26 +231,14 @@ public class LogActivity extends ListActivity
         // Log.v("alogcat", "restore instance");
     }
 
-    public void reset()
+    public void reset(boolean clear)
     {
         Toast.makeText(this, R.string.reading_logs, Toast.LENGTH_SHORT).show();
         mLastLevel = Level.V;
 
-        if (mLogcat != null)
-        {
-            mLogcat.stop();
-        }
-
         mPlay = true;
 
-        EX.execute(new Runnable()
-        {
-            public void run()
-            {
-                mLogcat = new Logcat(mHandler);
-                mLogcat.start();
-            }
-        });
+        if(mLogCat != null)mLogCat.start(clear);
     }
 
     @Override
@@ -366,8 +347,7 @@ public class LogActivity extends ListActivity
                 }
                 return true;
             case MENU_CLEAR:
-                clear();
-                reset();
+                reset(true);
                 return true;
             case MENU_PREFS:
                 Intent intent = new Intent(this, PrefsActivity.class);
@@ -417,27 +397,6 @@ public class LogActivity extends ListActivity
                 return true;
             default:
                 return super.onContextItemSelected(item);
-        }
-    }
-
-    private void clear()
-    {
-        try
-        {
-            List<String> progs = new ArrayList<>();
-
-            if (Prefs.hasRootAccess())
-            {
-                progs.add("su");
-                progs.add("-c");
-            }
-            progs.add("logcat");
-            progs.add("-c");
-            Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
-        }
-        catch (IOException e)
-        {
-            Log.e("alogcat", "error clearing log", e);
         }
     }
 
@@ -514,7 +473,7 @@ public class LogActivity extends ListActivity
     private File save()
     {
         final File path = new File(Environment.getExternalStorageDirectory(), "alogcat");
-        final File file = new File(path + File.separator + "alogcat." + LogSaver.LOG_FILE_FORMAT.format(new Date()) + ".txt");
+        final File file = new File(path + File.separator + "alogcat." + LOG_FILE_FORMAT.format(new Date()) + ".txt");
 
         // String msg = "saving log to: " + file.toString();
         // Log.d("alogcat", msg);
@@ -568,9 +527,9 @@ public class LogActivity extends ListActivity
             return;
         }
         getActionBar().setSubtitle(getString(R.string.app_name_paused));
-        if (mLogcat != null)
+        if (mLogCat != null)
         {
-            mLogcat.setPlay(false);
+            mLogCat.setPlay(false);
             mPlay = false;
         }
         setPlayMenu();
@@ -583,14 +542,14 @@ public class LogActivity extends ListActivity
             return;
         }
         getActionBar().setSubtitle(null);
-        if (mLogcat != null)
+        if (mLogCat != null)
         {
-            mLogcat.setPlay(true);
+            mLogCat.setPlay(true);
             mPlay = true;
         }
         else
         {
-            reset();
+            reset(false);
         }
         setPlayMenu();
     }
