@@ -38,8 +38,6 @@ public class LogActivity extends ListActivity
     static final SimpleDateFormat LOG_DATE_FORMAT = new SimpleDateFormat("MMM d, yyyy HH:mm:ss ZZZZ");
     private static final Executor EX = Executors.newCachedThreadPool();
 
-    static final int FILTER_DIALOG = 1;
-
     private static final int PREFS_REQUEST = 1;
 
     private static final int MENU_FILTER = 1;

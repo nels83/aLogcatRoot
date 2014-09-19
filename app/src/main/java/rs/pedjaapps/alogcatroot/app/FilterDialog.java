@@ -92,7 +92,7 @@ public class FilterDialog extends AlertDialog
                         Prefs.setFilterPattern(patternCheckBox.isChecked());
 
                         mLogActivity.setFilterMenu();
-                        mLogActivity.dismissDialog(LogActivity.FILTER_DIALOG);
+                        dismiss();
                         mLogActivity.reset();
                     }
                 });
@@ -112,7 +112,7 @@ public class FilterDialog extends AlertDialog
                         fd.mError = false;
 
                         mLogActivity.setFilterMenu();
-                        mLogActivity.dismissDialog(LogActivity.FILTER_DIALOG);
+                        dismiss();
                         mLogActivity.reset();
                     }
                 });
@@ -127,7 +127,7 @@ public class FilterDialog extends AlertDialog
                         patternCheckBox.setChecked(Prefs.isFilterPattern());
 
                         fd.mError = false;
-                        mLogActivity.dismissDialog(LogActivity.FILTER_DIALOG);
+                        dismiss();
                     }
                 });
 
