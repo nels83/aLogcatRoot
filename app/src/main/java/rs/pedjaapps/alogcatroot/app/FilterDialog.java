@@ -26,7 +26,7 @@ public class FilterDialog extends AlertDialog
         }
     }
 
-    public FilterDialog(LogActivity logActivity)
+    public FilterDialog(LogActivity logActivity, final boolean filter)
     {
         super(logActivity);
 
@@ -35,21 +35,17 @@ public class FilterDialog extends AlertDialog
         LayoutInflater factory = LayoutInflater.from(mLogActivity);
         final View view = factory.inflate(R.layout.filter_dialog, null);
 
-        final EditText filterEdit = (EditText) view
-                .findViewById(R.id.filter_edit);
-        filterEdit.setText(Prefs.getFilter());
+        final EditText tvInput = (EditText) view.findViewById(R.id.tvInput);
+        tvInput.setText(filter ? Prefs.getFilter() : Prefs.getSearch());
 
         final TextView patternErrorText = (TextView) view.findViewById(R.id.pattern_error_text);
         patternErrorText.setVisibility(View.GONE);
 
-        final CheckBox patternCheckBox = (CheckBox) view
-                .findViewById(R.id.pattern_checkbox);
-        patternCheckBox.setChecked(Prefs.isFilterPattern());
+        final CheckBox patternCheckBox = (CheckBox) view.findViewById(R.id.pattern_checkbox);
+        patternCheckBox.setChecked(filter ? Prefs.isFilterPattern() : Prefs.isSearchPattern());
         CompoundButton.OnCheckedChangeListener occl = new CompoundButton.OnCheckedChangeListener()
         {
-
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked)
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
                 if (!isChecked)
                 {
@@ -62,74 +58,83 @@ public class FilterDialog extends AlertDialog
         patternCheckBox.setOnCheckedChangeListener(occl);
 
         setView(view);
-        setTitle(R.string.filter_dialog_title);
+        setTitle(filter ? R.string.filter_dialog_title : R.string.search_dialog_title);
 
-        setButton(BUTTON_POSITIVE, mLogActivity.getResources().getString(R.string.ok),
-                new OnClickListener()
+        setButton(BUTTON_POSITIVE, mLogActivity.getResources().getString(R.string.ok), new OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                FilterDialog fd = (FilterDialog) dialog;
+                String f = tvInput.getText().toString();
+                if (patternCheckBox.isChecked())
                 {
-                    public void onClick(DialogInterface dialog, int which)
+                    try
                     {
-                        FilterDialog fd = (FilterDialog) dialog;
-                        String f = filterEdit.getText().toString();
-                        if (patternCheckBox.isChecked())
-                        {
-                            try
-                            {
-                                Pattern.compile(f);
-                            }
-                            catch (PatternSyntaxException e)
-                            {
-                                patternErrorText.setVisibility(View.VISIBLE);
-                                fd.mError = true;
-                                return;
-                            }
-                        }
-
-                        fd.mError = false;
-                        patternErrorText.setVisibility(View.GONE);
-
-                        Prefs.setFilter(filterEdit.getText().toString());
-                        Prefs.setFilterPattern(patternCheckBox.isChecked());
-
-                        mLogActivity.setFilterMenu();
-                        dismiss();
-                        mLogActivity.reset(false);
+                        Pattern.compile(f);
                     }
-                });
-        setButton(BUTTON_NEUTRAL, mLogActivity.getResources().getString(R.string.clear),
-                new OnClickListener()
+                    catch (PatternSyntaxException e)
+                    {
+                        patternErrorText.setVisibility(View.VISIBLE);
+                        fd.mError = true;
+                        return;
+                    }
+                }
+
+                fd.mError = false;
+                patternErrorText.setVisibility(View.GONE);
+
+                if (filter)
                 {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        FilterDialog fd = (FilterDialog) dialog;
-
-                        Prefs.setFilter(null);
-                        filterEdit.setText(null);
-
-                        Prefs.setFilterPattern(false);
-                        patternCheckBox.setChecked(false);
-
-                        fd.mError = false;
-
-                        mLogActivity.setFilterMenu();
-                        dismiss();
-                        mLogActivity.reset(false);
-                    }
-                });
-        setButton(BUTTON_NEGATIVE, mLogActivity.getResources().getString(R.string.cancel),
-                new OnClickListener()
+                    Prefs.setFilter(tvInput.getText().toString());
+                    Prefs.setFilterPattern(patternCheckBox.isChecked());
+                }
+                else
                 {
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        FilterDialog fd = (FilterDialog) dialog;
+                    Prefs.setSearch(tvInput.getText().toString());
+                    Prefs.setSearchPattern(patternCheckBox.isChecked());
+                }
 
-                        filterEdit.setText(Prefs.getFilter());
-                        patternCheckBox.setChecked(Prefs.isFilterPattern());
+                if(filter)mLogActivity.setFilterMenu();
+                else mLogActivity.setSearchMenu();
+                dismiss();
+                mLogActivity.reset(false);
+            }
+        });
+        setButton(BUTTON_NEUTRAL, mLogActivity.getResources().getString(R.string.clear), new OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                FilterDialog fd = (FilterDialog) dialog;
 
-                        fd.mError = false;
-                        dismiss();
-                    }
-                });
+                if(filter)Prefs.setFilter(null);
+                else Prefs.setSearch(null);
+                tvInput.setText(null);
+
+                if(filter)Prefs.setFilterPattern(false);
+                else Prefs.setSearchPattern(false);
+                patternCheckBox.setChecked(false);
+
+                fd.mError = false;
+
+                if(filter)mLogActivity.setFilterMenu();
+                else mLogActivity.setSearchMenu();
+                dismiss();
+                mLogActivity.reset(false);
+            }
+        });
+        setButton(BUTTON_NEGATIVE, mLogActivity.getResources().getString(R.string.cancel), new OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                FilterDialog fd = (FilterDialog) dialog;
+
+                tvInput.setText(filter ? Prefs.getFilter() : Prefs.getSearch());
+                patternCheckBox.setChecked(filter ? Prefs.isFilterPattern() : Prefs.isSearchPattern());
+
+                fd.mError = false;
+                dismiss();
+            }
+        });
 
     }
 }

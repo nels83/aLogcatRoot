@@ -13,8 +13,11 @@
     <string name="verbose_title">Verbose</string>
     <string name="debug_title">Debug</string>
     <string name="filter_menu">Filter (%s)</string>
+    <string name="search_menu">Search (%s)</string>
     <string name="filter_dialog_title">Log Filter</string>
+    <string name="search_dialog_title">Log Search</string>
     <string name="filter_menu_empty">Filter</string>
+    <string name="search_menu_empty">Search</string>
     <string name="filter_dialog_text">A log filter can be a simple substring or a Java-conforming regular expression.</string>
     <string name="pattern_error_text">Invalid regular expression</string>
     <string name="clear">Clear</string>

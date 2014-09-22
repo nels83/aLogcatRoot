@@ -16,6 +16,7 @@ public class Prefs
     public static final String TEXTSIZE_KEY = "textsize";
     public static final String BACKGROUND_COLOR_KEY = "backgroundColor";
     public static final String FILTER_PATTERN_KEY = "filterPattern";
+    public static final String SEARCH_PATTERN_KEY = "searchPattern";
     public static final String SHARE_HTML_KEY = "shareHtml";
     public static final String KEEP_SCREEN_ON_KEY = "keepScreenOn";
 
@@ -106,6 +107,11 @@ public class Prefs
         return getString("filter", null);
     }
 
+    public static String getSearch()
+    {
+        return getString("search", null);
+    }
+
     public static Pattern getFilterPattern()
     {
         if (!isFilterPattern())
@@ -130,9 +136,38 @@ public class Prefs
         }
     }
 
+    public static Pattern getSearchPattern()
+    {
+        if (!isSearchPattern())
+        {
+            return null;
+        }
+
+        String p = getString("search", null);
+        if (p == null)
+        {
+            return null;
+        }
+        try
+        {
+            return Pattern.compile(p, Pattern.CASE_INSENSITIVE);
+        }
+        catch (PatternSyntaxException e)
+        {
+            setString("search", null);
+            Log.w("alogcat", "invalid search pattern found, cleared");
+            return null;
+        }
+    }
+
     public static void setFilter(String filter)
     {
         setString("filter", filter);
+    }
+
+    public static void setSearch(String search)
+    {
+        setString("search", search);
     }
 
     public static BackgroundColor getBackgroundColor()
@@ -179,5 +214,15 @@ public class Prefs
     public static void setFilterPattern(boolean filterPattern)
     {
         setBoolean(FILTER_PATTERN_KEY, filterPattern);
+    }
+
+    public static boolean isSearchPattern()
+    {
+        return getBoolean(SEARCH_PATTERN_KEY, false);
+    }
+
+    public static void setSearchPattern(boolean searchPattern)
+    {
+        setBoolean(SEARCH_PATTERN_KEY, searchPattern);
     }
 }

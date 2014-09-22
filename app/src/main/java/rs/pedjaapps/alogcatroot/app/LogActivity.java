@@ -42,6 +42,7 @@ public class LogActivity extends ListActivity
     private static final int PREFS_REQUEST = 1;
 
     private static final int MENU_FILTER = 1;
+    private static final int MENU_SEARCH = 13;
     private static final int MENU_SHARE = 5;
     private static final int MENU_PLAY = 6;
     private static final int MENU_CLEAR = 8;
@@ -59,6 +60,7 @@ public class LogActivity extends ListActivity
     private LogEntryAdapter mLogEntryAdapter;
     private MenuItem mPlayItem;
     private MenuItem mFilterItem;
+    private MenuItem mSearchItem;
 
     private Level mLastLevel = Level.V;
     private LogCat mLogCat;
@@ -251,10 +253,15 @@ public class LogActivity extends ListActivity
         mPlayItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         setPlayMenu();
 
-        mFilterItem = menu.add(0, MENU_FILTER, 0, getResources().getString(R.string.filter_menu, Prefs.getFilter()));
-        mFilterItem.setIcon(R.drawable.ic_action_filter);
-        mFilterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        mSearchItem = menu.add(0, MENU_FILTER, 0, getResources().getString(R.string.filter_menu, Prefs.getFilter()));
+        mSearchItem.setIcon(R.drawable.ic_action_filter);
+        mSearchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         setFilterMenu();
+
+        mFilterItem = menu.add(0, MENU_SEARCH, 0, getResources().getString(R.string.search_menu, Prefs.getSearch()));
+        mFilterItem.setIcon(android.R.drawable.ic_menu_search);
+        mFilterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        setSearchMenu();
 
         MenuItem clearItem = menu.add(0, MENU_CLEAR, 0, R.string.clear_menu);
         clearItem.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
@@ -319,14 +326,38 @@ public class LogActivity extends ListActivity
         mFilterItem.setTitle(getResources().getString(filterMenuId, filter));
     }
 
+    void setSearchMenu()
+    {
+        if (mSearchItem == null)
+        {
+            return;
+        }
+        int searchMenuId;
+        String search = Prefs.getSearch();
+        if (search == null || search.length() == 0)
+        {
+            searchMenuId = R.string.search_menu_empty;
+        }
+        else
+        {
+            searchMenuId = R.string.search_menu;
+        }
+        mSearchItem.setTitle(getResources().getString(searchMenuId, search));
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
             case MENU_FILTER:
-                AlertDialog mFilterDialog = new FilterDialog(this);
+                AlertDialog mFilterDialog = new FilterDialog(this, true);
                 mFilterDialog.show();
+                return true;
+            case MENU_SEARCH:
+                AlertDialog mSearchDialog = new FilterDialog(this, false);
+                mSearchDialog.show();
                 return true;
             case MENU_SHARE:
                 share();
