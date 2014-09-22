@@ -253,14 +253,14 @@ public class LogActivity extends ListActivity
         mPlayItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         setPlayMenu();
 
-        mSearchItem = menu.add(0, MENU_FILTER, 0, getResources().getString(R.string.filter_menu, Prefs.getFilter()));
-        mSearchItem.setIcon(R.drawable.ic_action_filter);
-        mSearchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        mFilterItem = menu.add(0, MENU_FILTER, 0, getResources().getString(R.string.filter_menu, Prefs.getFilter()));
+        mFilterItem.setIcon(R.drawable.ic_action_filter);
+        mFilterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         setFilterMenu();
 
-        mFilterItem = menu.add(0, MENU_SEARCH, 0, getResources().getString(R.string.search_menu, Prefs.getSearch()));
-        mFilterItem.setIcon(android.R.drawable.ic_menu_search);
-        mFilterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        mSearchItem = menu.add(0, MENU_SEARCH, 0, getResources().getString(R.string.search_menu, Prefs.getSearch()));
+        mSearchItem.setIcon(android.R.drawable.ic_menu_search);
+        mSearchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         setSearchMenu();
 
         MenuItem clearItem = menu.add(0, MENU_CLEAR, 0, R.string.clear_menu);
