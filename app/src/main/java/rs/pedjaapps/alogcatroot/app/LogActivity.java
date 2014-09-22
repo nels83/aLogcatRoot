@@ -252,7 +252,7 @@ public class LogActivity extends ListActivity
         setPlayMenu();
 
         mFilterItem = menu.add(0, MENU_FILTER, 0, getResources().getString(R.string.filter_menu, Prefs.getFilter()));
-        mFilterItem.setIcon(android.R.drawable.ic_menu_search);
+        mFilterItem.setIcon(R.drawable.ic_action_filter);
         mFilterItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         setFilterMenu();
 
