@@ -20,8 +20,6 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -137,7 +135,6 @@ public class LogActivity extends ListActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
         setContentView(R.layout.log);
         getWindow().setTitle(getResources().getString(R.string.app_name));
 

@@ -3,8 +3,6 @@
     package="rs.pedjaapps.alogcatroot.app" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
 
     <application
@@ -29,10 +27,6 @@
         <activity
             android:name=".PrefsActivity"
             android:label="@string/app_prefs" />
-
-        <meta-data
-            android:name="com.crashlytics.ApiKey"
-            android:value="dfda65c0dfc9a63025b8d6e98dc98ce082190d2b" />
 
     </application>
 
