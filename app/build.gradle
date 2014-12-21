@@ -4,8 +4,8 @@ buildscript {
         maven { url 'http://download.crashlytics.com/maven' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.14.7'
     }
 }
 apply plugin: 'com.android.application'
@@ -17,13 +17,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "rs.pedjaapps.alogcatroot.app"
         minSdkVersion 16
-        targetSdkVersion 19
+        targetSdkVersion 21
         versionCode 20140922
         versionName "1.0.2"
     }
@@ -43,7 +43,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            runProguard false
+            minifyEnabled false
             // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -54,5 +54,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.crashlytics.android:crashlytics:1.+'
+    compile 'com.crashlytics.android:crashlytics:1.1.13'
 }
