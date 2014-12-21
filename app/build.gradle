@@ -24,8 +24,8 @@ android {
         applicationId "rs.pedjaapps.alogcatroot.app"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 20140922
-        versionName "1.0.2"
+        versionCode 20141221
+        versionName "1.0.3"
     }
     signingConfigs {
         release {
