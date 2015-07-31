@@ -8,15 +8,17 @@ public enum Buffer
 {
     MAIN("main", R.string.main_title),
     EVENTS("events", R.string.events_title),
-    RADIO("radio", R.string.radio_title);
+    RADIO("radio", R.string.radio_title),
+    ALLBUFFERS("all", R.string.allbuffers_title);
 
-    private static Buffer[] byOrder = new Buffer[3];
+    private static Buffer[] byOrder = new Buffer[4];
 
     static
     {
         byOrder[0] = MAIN;
         byOrder[1] = EVENTS;
         byOrder[2] = RADIO;
+        byOrder[3] = ALLBUFFERS;
     }
 
     private static final HashMap<String, Buffer> VALUE_MAP = new HashMap<String, Buffer>();
@@ -26,6 +28,7 @@ public enum Buffer
         VALUE_MAP.put(MAIN.mValue, MAIN);
         VALUE_MAP.put(EVENTS.mValue, EVENTS);
         VALUE_MAP.put(RADIO.mValue, RADIO);
+        VALUE_MAP.put(ALLBUFFERS.mValue, ALLBUFFERS);
     }
 
     private String mValue;

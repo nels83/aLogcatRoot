@@ -40,11 +40,13 @@
 		<item>Main</item>
 		<item>Events</item>
 		<item>Radio</item>
+		<item>All</item>
 	</string-array>
 	<string-array name="buffer_values">
 		<item>MAIN</item>
 		<item>EVENTS</item>
 		<item>RADIO</item>
+		<item>ALLBUFFERS</item>
 	</string-array>
 	<string-array name="textsize_entries">
 		<item>Small</item>
